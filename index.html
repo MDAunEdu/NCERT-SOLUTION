@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCERT Class 10 Solutions</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: #111;
+    color: white;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+}
+
+.item:hover { background: #222; }
+
+.sub {
+    padding-left: 15px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.active {
+    background: #444 !important;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    background: #111;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.download-btn {
+    background: #28a745;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.download-btn:hover {
+    background: #218838;
+}
+
+.viewer {
+    flex: 1;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Class 10</h2>
+    <div id="menu"></div>
+</div>
+
+<div class="content">
+    <div class="topbar">
+        <div id="title">Select Chapter</div>
+        <a id="downloadBtn" class="download-btn" download style="display:none;">Download PDF</a>
+    </div>
+    <div class="viewer">
+        <iframe id="pdfViewer"></iframe>
+    </div>
+</div>
+
+<script>
+const sectionNames = {
+    kavya: "काव्य – खंड",
+    gadya: "गद्य – खंड",
+    prose: "Prose",
+    poem: "Poem"
+};
+
+let activeItem = null;
+
+function setActive(el) {
+    if (activeItem) activeItem.classList.remove("active");
+    el.classList.add("active");
+    activeItem = el;
+}
+
+const data = {
+
+    science: {
+        name: "Science",
+        chapters: [
+            "Chemical Reactions and Equations",
+            "Acids, Bases and Salts",
+            "Metals and Non-metals",
+            "Carbon and its Compounds",
+            "Life Processes",
+            "Control and Coordination",
+            "How do Organisms Reproduce",
+            "Heredity and Evolution",
+            "Light – Reflection and Refraction",
+            "The Human Eye and Colourful World",
+            "Electricity",
+            "Magnetic Effects of Electric Current",
+            "Sources of Energy",
+            "Our Environment",
+            "Management of Natural Resources"
+        ]
+    },
+
+    history: {
+        name: "History",
+        chapters: [
+            "The Rise of Nationalism in Europe",
+            "Nationalism in India",
+            "The Making of a Global World",
+            "The Age of Industrialisation",
+            "Print Culture and the Modern World"
+        ]
+    },
+
+    geography: {
+        name: "Geography",
+        chapters: [
+            "Resources and Development",
+            "Forest and Wildlife Resources",
+            "Water Resources",
+            "Agriculture",
+            "Minerals and Energy Resources",
+            "Manufacturing Industries",
+            "Lifelines of National Economy"
+        ]
+    },
+
+    civics: {
+        name: "Civics",
+        chapters: [
+            "Power Sharing",
+            "Federalism",
+            "Democracy and Diversity",
+            "Gender, Religion and Caste",
+            "Popular Struggles and Movements",
+            "Political Parties",
+            "Outcomes of Democracy",
+            "Challenges to Democracy"
+        ]
+    },
+
+    economics: {
+        name: "Economics",
+        chapters: [
+            "Development",
+            "Sectors of the Indian Economy",
+            "Money and Credit",
+            "Globalisation and the Indian Economy",
+            "Consumer Rights"
+        ]
+    },
+
+    englishFirstFlight: {
+        name: "English First Flight",
+        sections: {
+            prose: [
+                "A Letter to God","Nelson Mandela","Two Stories about Flying","From the Diary of Anne Frank",
+                "The Hundred Dresses I","The Hundred Dresses II","Glimpses of India","Mijbil the Otter",
+                "Madam Rides the Bus","The Sermon at Benares","The Proposal"
+            ],
+            poem: [
+                "Dust of Snow","Fire and Ice","A Tiger in the Zoo","How to Tell Wild Animals",
+                "The Ball Poem","Amanda","Animals","The Trees","Fog",
+                "The Tale of Custard the Dragon","For Anne Gregory"
+            ]
+        }
+    },
+
+    footprints: {
+        name: "Footprints Without Feet",
+        chapters: [
+            "A Triumph of Surgery","The Thief’s Story","The Midnight Visitor","A Question of Trust",
+            "Footprints without Feet","The Making of a Scientist","The Necklace","The Hack Driver",
+            "Bholi","The Book that Saved the Earth"
+        ]
+    },
+
+    hindiSparsh: {
+        name: "Hindi Sparsh",
+        sections: {
+            kavya: [
+                "Chapter 1 साखी","Chapter 2 पद","Chapter 3 दोहे","Chapter 4 मनुष्यता",
+                "Chapter 5 पर्वत प्रदेश में पावस","Chapter 6 मधुर-मधुर मेरे दीपक जल",
+                "Chapter 7 तोप","Chapter 8 कर चले हम फ़िदा"
+            ],
+            gadya: [
+                "Chapter 9 आत्मत्राण","Chapter 10 बड़े भाई साहब","Chapter 11 डायरी का एक पन्ना",
+                "Chapter 12 तताँरा-वामीरो कथा","Chapter 13 तीसरी कसम के शिल्पकार शैलेंद्र",
+                "Chapter 14 गिरगिट","Chapter 15 अब कहाँ दूसरे के दुख से दुखी होने वाले",
+                "Chapter 16 पतझर में टूटी पत्तियाँ","Chapter 17 कारतूस"
+            ]
+        }
+    },
+
+    hindiSanchayan: {
+        name: "Hindi Sanchayan",
+        chapters: [
+            "Chapter 1 हरिहर काका",
+            "Chapter 2 सपनों के-से दिन",
+            "Chapter 3 टोपी शुक्ला"
+        ]
+    }
+};
+
+const menu = document.getElementById("menu");
+
+function openChapter(subject, chapter) {
+    const clean = chapter.replace(/Chapter\s\d+\s/, "").replace(/ /g, "_");
+    const pdfPath = "pdfs/" + clean + ".pdf";
+
+    document.getElementById("title").innerText = subject + " - " + chapter;
+    document.getElementById("pdfViewer").src = pdfPath;
+
+    const btn = document.getElementById("downloadBtn");
+    btn.href = pdfPath;
+    btn.style.display = "inline-block";
+}
+
+function renderMenu() {
+    for (let key in data) {
+        const subject = data[key];
+
+        const subjectDiv = document.createElement("div");
+        subjectDiv.className = "item";
+        subjectDiv.innerText = subject.name;
+        menu.appendChild(subjectDiv);
+
+        if (subject.sections) {
+            for (let sec in subject.sections) {
+                const secDiv = document.createElement("div");
+                secDiv.className = "item sub";
+                secDiv.innerText = sectionNames[sec];
+                menu.appendChild(secDiv);
+
+                subject.sections[sec].forEach(ch => {
+                    const chDiv = document.createElement("div");
+                    chDiv.className = "item sub";
+                    chDiv.innerText = ch.replace("Chapter ", "");
+
+                    chDiv.onclick = () => {
+                        setActive(chDiv);
+                        openChapter(subject.name, ch);
+                    };
+
+                    menu.appendChild(chDiv);
+                });
+            }
+        }
+
+        if (subject.chapters) {
+            subject.chapters.forEach(ch => {
+                const chDiv = document.createElement("div");
+                chDiv.className = "item sub";
+                chDiv.innerText = ch.replace("Chapter ", "");
+
+                chDiv.onclick = () => {
+                    setActive(chDiv);
+                    openChapter(subject.name, ch);
+                };
+
+                menu.appendChild(chDiv);
+            });
+        }
+    }
+}
+
+renderMenu();
+</script>
+
+</body>
+</html>
