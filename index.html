@@ -242,7 +242,7 @@ const menu = document.getElementById("menu");
 
 function openChapter(subject, chapter) {
     const clean = chapter.replace(/Chapter\s\d+\s/, "").replace(/ /g, "_");
-    const pdfPath = "pdfs/" + clean + ".pdf";
+    const pdfPath = clean + ".pdf";
 
     document.getElementById("title").innerText = subject + " - " + chapter;
     document.getElementById("pdfViewer").src = pdfPath;
